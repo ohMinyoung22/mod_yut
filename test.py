@@ -1,7 +1,5 @@
 import random
-from enum import Enum
 
-from numpy import double
 from team import Team
 from teammanager import TeamManager
 
@@ -44,16 +42,13 @@ class Test:
 
     #ThrowingEvent       
     def throw(self, team):
-        # 던지는 UI 처리
-        # 말 선택 UI 처리
         # delta, piece = UIManager.throw(team)
+
         delta = random.randint(-1, 5)
         piece = team.getPiece(0)
 
         return self.move(piece, delta)
 
-
-    #PiecePositionChangedEvent
     def move(self, piece, delta):
 
         nextPosition = piece.currentPosition + delta
@@ -61,6 +56,7 @@ class Test:
 
         if delta == 0:
             print("낙")
+
 
             print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
             print("----------------------------------------------")
@@ -126,6 +122,8 @@ class Test:
         print("move piece called")
         piece.currentPosition = nextPosition
 
+        #UIManager.MovePiece(piece, nextPosition)
+
         if piece.movingMode == MOVING_MODE.DEFAULT and piece.currentPosition == 20:
             pass
             # 말 시작점에 위치 -> 게임 시작 시와 구분되어야 함
@@ -138,6 +136,7 @@ class Test:
         if (piece.currentPosition == 5 or piece.currentPosition == 10) and piece.movingMode == MOVING_MODE.DEFAULT:
             isAheadShortCut = True  # 지름길 이용
             # UI 상에서 플레이어가 어느 길로 갈지 선택하는 로직
+            # isAheadShortCut = UIManager.selectDirection(piece)
 
             if isAheadShortCut:
                 if piece.currentPosition == 5:
@@ -153,6 +152,9 @@ class Test:
                 piece.movingMode = MOVING_MODE.DEFAULT
 
     def endPiece(self, piece):
+
+        #UIManager.MovePiece(piece, delta)
+
         self.teamManager.removePiece(piece)
 
 

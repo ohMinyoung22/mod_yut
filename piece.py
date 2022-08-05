@@ -7,8 +7,7 @@ class MOVING_MODE(Enum):
     FROM_LEFT_CORNER = 3
 
 class Piece:
-    def __init__(self, team, entity, index):
-        self.team = team
+    def __init__(self, entity, index):
         self.currentPosition = 0
         self.movingMode = MOVING_MODE.DEFAULT
         self.entity = entity
