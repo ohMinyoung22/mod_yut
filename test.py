@@ -4,23 +4,19 @@ from team import Team
 from teammanager import TeamManager
 
 from piece import MOVING_MODE
-
-
-class Player:
-    def __init__(self, team, playerID):
-        self.team = team
-        self.playerID = playerID
-
+from uimanager import UIManager
 
 # 여러 개 말 있을 때 상황 구현 (업기, 말 선택해서 이동)
-# 턴 종료 시 상대팀으로 턴 넘기기 구현 + 팀 플레이어 마다 번갈아 가면서 던지는 것 구현 -> 완료
+# 플레이어 구현
 # 플레이어 엔티티 자유롭게 움직일 수 있도록 구현(게임 플레이에는 영향 없게)
 
+# 플레이어 구현 -> 말 선택해서 이동 -> 업기 -> MOD로 옮기기
 class Test:
     def __init__(self):
         self.teamManager = TeamManager()
         while(True):
             self.startGame()
+            input("any key")
         
         # 플레이어가 주사위를 던짐 -> 숫자 지정(도/개/걸/윷/모/백도에 대응) -> 말 들어왔는지 여부 확인 ->
         # 백도 체크 -> 말 움직이기 -> 코너 여부 확인(지름길) -> 다시 던지기 여부 확인(윷/모)
@@ -49,10 +45,7 @@ class Test:
 
     #ThrowingEvent       
     def throw(self, team):
-        # delta, piece = UIManager.throw(team)
-
-        delta = random.randint(-1, 5)
-        piece = team.getPiece(0)
+        delta, piece = UIManager.throw(team)
 
         return self.move(piece, delta)
 
@@ -111,7 +104,6 @@ class Test:
         else:
             piece.currentPosition = piece.currentPosition - 1
 
-    #PieceGoalEvent
     def checkEnd(self, piece, nextPosition):
         if piece.movingMode == MOVING_MODE.DEFAULT:
             if nextPosition > 20:
@@ -128,21 +120,13 @@ class Test:
         print("move piece called")
         piece.currentPosition = nextPosition
 
-        #UIManager.MovePiece(piece, nextPosition)
-
-        if piece.movingMode == MOVING_MODE.DEFAULT and piece.currentPosition == 20:
-            pass
-            # 말 시작점에 위치 -> 게임 시작 시와 구분되어야 함
-
-        print("piece moved - " + str(piece.currentPosition) + " : " + str(piece.movingMode))
-        # UI 상에서 엔티티 옮기는 로직
+        UIManager.MovePiece(piece, nextPosition)
 
     def selectDirection(self, piece):
         print("direction called")
         if (piece.currentPosition == 5 or piece.currentPosition == 10) and piece.movingMode == MOVING_MODE.DEFAULT:
-            isAheadShortCut = True  # 지름길 이용
             # UI 상에서 플레이어가 어느 길로 갈지 선택하는 로직
-            # isAheadShortCut = UIManager.selectDirection(piece)
+            isAheadShortCut = UIManager.selectDirection(piece)
 
             if isAheadShortCut:
                 if piece.currentPosition == 5:
