@@ -7,32 +7,39 @@ class Team:
         self.pieces = pieces
 
         self.thrower = players[0]
-    
-    def getPiece(self, index):
+
+        self.isFirstThrow = True
+
+    def getPiece(self, _index):
         for piece in self.pieces:
-            if piece.index == index:
+            if int(piece.index) == int(_index):
                 return piece
-    
+
     def isAllPieceEnd(self):
         return len(self.pieces) == 0
 
     def removePiece(self, piece):
         if self.pieces.__contains__(piece):
-            print("teamName : " + self.teamName + " piece : " + str(piece.index))
+            print("removed " + self.teamName + " " + piece.__str__())
             self.pieces.remove(piece)
             return True
-        
+
         return False
 
     def getNextThrower(self):
-        currentIndex = self.players.index(self.thrower)
-        nextIndex = -1
+        if self.isFirstThrow:
+            self.isFirstThrow = False
+            return self.thrower
 
-        if currentIndex == (len(self.players) - 1):
-            nextIndex = 0
         else:
-            nextIndex = currentIndex + 1
+            currentIndex = self.players.index(self.thrower)
+            nextIndex = -1
 
-        self.thrower = self.players[nextIndex]
+            if currentIndex == (len(self.players) - 1):
+                nextIndex = 0
+            else:
+                nextIndex = currentIndex + 1
 
-        return self.thrower
+            self.thrower = self.players[nextIndex]
+
+            return self.thrower

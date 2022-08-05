@@ -1,4 +1,6 @@
-from random import random
+from random import randint, random
+
+from piece import MOVING_MODE
 
 
 class UIManager:
@@ -6,17 +8,16 @@ class UIManager:
         pass
 
     def throw(self, team):
-        print("UIManager throw current Team : " + team.teamName)
         thrower = team.getNextThrower()
         print("current thrower : " + thrower.playerID)
 
-        input("press any to throw - "  + thrower.playerID + " : ")
-        delta = random.randint(-1, 5)
-        piece_num = input("press 1 ~ 3 to choose piece : ")
+        input("press any to throw")
+        delta = randint(-1, 5)
+        print(f"나온 숫자 {str(delta)}")
+        piece_num = input("press 0 ~ 1 to choose piece : ")
         piece = team.getPiece(piece_num)
 
-        print("piece info UI ------------------- ")
-        print("piece pos : " + piece.currentPosition + " : piece mode : " + str(piece.movingMode))
+        print(f"UIManager 고른 piece : {piece.__str__()}")
         return (delta, piece)
 
     def movePiece(self, piece, nextPosition):
@@ -27,6 +28,17 @@ class UIManager:
     def selectDirection(self, piece):
         selection = input("1 - 일반 / 2 - 지름길")
 
-        return True if selection == 2 else False
+        return True if int(selection) == 2 else False
 
         #piece 밑에 방향 표시?
+    
+    def endPiece(self, piece):
+        if piece.movingMode == MOVING_MODE.DEFAULT:
+            # piece currentPos -> 20
+            # 말 없애기
+            pass
+        else:
+            # piece currnetPos -> 6
+            # 말 없애기
+            pass
+

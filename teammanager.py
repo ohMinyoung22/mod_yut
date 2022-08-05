@@ -1,4 +1,5 @@
 from piece import Piece
+from player import Player
 from team import Team
 
 class TeamManager:
@@ -9,15 +10,21 @@ class TeamManager:
     def initialize(self):
         self.teamList = []
 
-        piece_red_0 = Piece("abs", 0)
-        piece_red_1 = Piece("absd", 1)
+        piece_red_0 = Piece("red0", 0)
+        piece_red_1 = Piece("red1", 1)
 
-        team_red = Team('RED', [piece_red_0, piece_red_1])
+        player1 = Player("red1")
+        player2 = Player("red2")
 
-        piece_blue_0 = Piece("abs", 0)
-        piece_blue_1 = Piece("absd", 1)
+        team_red = Team('RED', [piece_red_0, piece_red_1], [player1, player2])
 
-        team_blue = Team('BLUE', [piece_blue_0, piece_blue_1])
+        piece_blue_0 = Piece("blue0", 0)
+        piece_blue_1 = Piece("blue1", 1)
+
+        player3 = Player("blue1")
+        player4 = Player("blue2")
+
+        team_blue = Team('BLUE', [piece_blue_0, piece_blue_1], [player3, player4])
 
         self.teamList.append(team_red)
         self.teamList.append(team_blue)
@@ -37,7 +44,6 @@ class TeamManager:
             return self.currentThrowingTeam
 
         if isDouble:
-            print("isDouble : " + str(self.currentThrowingTeam.teamName))
             return self.currentThrowingTeam
         else:
             currentIndex = self.teamList.index(self.currentThrowingTeam)
@@ -50,7 +56,6 @@ class TeamManager:
 
             self.currentThrowingTeam = self.teamList[nextIndex]
 
-            print("Not isDouble : " + str(self.currentThrowingTeam.teamName))
             return self.currentThrowingTeam
 
     def getWinTeam(self):

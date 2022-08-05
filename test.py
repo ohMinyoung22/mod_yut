@@ -14,9 +14,12 @@ from uimanager import UIManager
 class Test:
     def __init__(self):
         self.teamManager = TeamManager()
+        self.UIManager = UIManager()
+
         while(True):
             self.startGame()
             input("any key")
+    
         
         # 플레이어가 주사위를 던짐 -> 숫자 지정(도/개/걸/윷/모/백도에 대응) -> 말 들어왔는지 여부 확인 ->
         # 백도 체크 -> 말 움직이기 -> 코너 여부 확인(지름길) -> 다시 던지기 여부 확인(윷/모)
@@ -37,34 +40,34 @@ class Test:
                 self.clearGame()
 
     def win(self, team):
-        print("-----------------------------------")
-        print(team.teamName + "팀 승리")
+        self.UIManager.win(team)
     
     def clearGame(self):
         self.teamManager.clear()
 
     #ThrowingEvent       
     def throw(self, team):
-        delta, piece = UIManager.throw(team)
+        delta, piece = self.UIManager.throw(team)
 
-        return self.move(piece, delta)
+        print("throw recieved piece : " + piece.__str__())
+
+        return self.move(piece, int(delta))
 
     def move(self, piece, delta):
 
         nextPosition = piece.currentPosition + delta
-        print("nextpos in move : " + str(nextPosition))
 
         if delta == 0:
             print("낙")
 
-            print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
+            print("적용 후 " + piece.__str__())
             print("----------------------------------------------")
             return False
 
         if delta == -1:
             self.back(piece)
 
-            print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
+            print("적용 후 " + piece.__str__())
             print("----------------------------------------------")
             return False
 
@@ -73,11 +76,11 @@ class Test:
             self.selectDirection(piece)
 
             if delta == 4 or delta == 5:
-                print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
+                print("적용 후 " + piece.__str__())
                 print("----------------------------------------------")
                 return True
             else:
-                print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
+                print("적용 후 " + piece.__str__())
                 print("----------------------------------------------")
                 return False
         else:
@@ -86,7 +89,7 @@ class Test:
 
     def back(self, piece):
         print("back called")
-        print("current pos : " + str(piece.currentPosition))
+
         if piece.currentPosition == 0:
             if piece.movingMode == MOVING_MODE.DEFAULT:
                 print("is default")
@@ -117,21 +120,20 @@ class Test:
                 return False
 
     def movePiece(self, piece, nextPosition):
-        print("move piece called")
+        print("move 적용 piece(전) : " + piece.__str__())
         piece.currentPosition = nextPosition
 
-        UIManager.MovePiece(piece, nextPosition)
+        self.UIManager.movePiece(piece, nextPosition)
 
     def selectDirection(self, piece):
-        print("direction called")
+        print("direction 적용 piece " + piece.__str__())
         if (piece.currentPosition == 5 or piece.currentPosition == 10) and piece.movingMode == MOVING_MODE.DEFAULT:
             # UI 상에서 플레이어가 어느 길로 갈지 선택하는 로직
-            isAheadShortCut = UIManager.selectDirection(piece)
+            isAheadShortCut = self.UIManager.selectDirection(piece)
 
             if isAheadShortCut:
                 if piece.currentPosition == 5:
                     piece.movingMode = MOVING_MODE.FROM_RIGHT_CORNER
-
                     print("right")
                     piece.currentPosition = 0
                 elif piece.currentPosition == 10:
@@ -142,10 +144,8 @@ class Test:
                 piece.movingMode = MOVING_MODE.DEFAULT
 
     def endPiece(self, piece):
-
-        #UIManager.MovePiece(piece, delta)
-
+        print("endPiece 적용 전 : " + piece.__str__())
+        self.UIManager.endPiece(piece)
         self.teamManager.removePiece(piece)
-
 
 Test()
