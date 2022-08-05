@@ -1,8 +1,5 @@
 from enum import Enum
-
-class TEAM(Enum):
-    RED = 1
-    BLUE = 2
+from team import Team
 
 class MOVING_MODE(Enum):
     DEFAULT = 1
@@ -10,8 +7,9 @@ class MOVING_MODE(Enum):
     FROM_LEFT_CORNER = 3
 
 class Piece:
-    def __init__(self, team, entity):
+    def __init__(self, team, entity, index):
         self.team = team
         self.currentPosition = 0
         self.movingMode = MOVING_MODE.DEFAULT
         self.entity = entity
+        self.index = index

@@ -1,7 +1,9 @@
 import random
 from enum import Enum
+from team import Team
+from teammanager import TeamManager
 
-from piece import Piece, TEAM, MOVING_MODE
+from piece import MOVING_MODE
 
 
 class Player:
@@ -16,30 +18,42 @@ class Player:
 
 class Test:
     def __init__(self):
-        self.piece = Piece(TEAM.BLUE, "abc")
-
-        # 시작점에서 백도
-        # self.move(self.piece, -1) # 정상 작동
-
-        # 코너에서 백도
-        # self.move(self.piece, 5)
-        # self.move(self.piece, -1) # 정상 작동
-
-        self.move(self.piece, 4)
-        self.move(self.piece, 3)
-        self.move(self.piece, 3)
-        self.move(self.piece, 3)
+        self.teamManager = TeamManager()
+        self.startGame()
         
-
         # 플레이어가 주사위를 던짐 -> 숫자 지정(도/개/걸/윷/모/백도에 대응) -> 말 들어왔는지 여부 확인 ->
         # 백도 체크 -> 말 움직이기 -> 코너 여부 확인(지름길) -> 다시 던지기 여부 확인(윷/모)
+
+    def startGame(self):
+        self.endGameFlag = False
+
+        while(self.endGameFlag == False):
+            if self.teamManager.isGameEnd() == False:
+                team = self.teamManager.getNextThrowingTeam()
+                self.throw(team)
+            else:
+                self.endGameFlag = True
+                team = self.teamManager.getWinTeam()
+                self.win(team)
+                self.clearGame()
+                
+    
+    def throw(self, team):
+        pass
 
     def move(self, piece, delta):
 
         nextPosition = piece.currentPosition + delta
         print("nextpos in move : " + str(nextPosition))
 
-        if (delta == -1):
+        if delta == 0:
+            print("낙")
+
+            print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
+            print("----------------------------------------------")
+            return True
+
+        if delta == -1:
             self.back(piece)
 
             print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
@@ -125,8 +139,7 @@ class Test:
                 piece.movingMode = MOVING_MODE.DEFAULT
 
     def endPiece(self, piece):
-        # self.pieces.remove(piece)
-        print("말 제거")
+        self.teamManager.removePiece(piece)
 
 
 Test()
