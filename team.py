@@ -1,3 +1,6 @@
+from matplotlib.pyplot import pie
+
+
 class Team:
 
     def __init__(self, teamName, pieces):
@@ -7,3 +10,8 @@ class Team:
     
     def addPlayer(self, player):
         self.players.append(player)
+    
+    def getPiece(self, index):
+        for piece in self.pieces:
+            if piece.index == index:
+                return piece

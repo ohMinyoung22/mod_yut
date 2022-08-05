@@ -1,5 +1,7 @@
 import random
 from enum import Enum
+
+from numpy import double
 from team import Team
 from teammanager import TeamManager
 
@@ -19,28 +21,39 @@ class Player:
 class Test:
     def __init__(self):
         self.teamManager = TeamManager()
-        self.startGame()
+        while(True):
+            self.startGame()
         
         # 플레이어가 주사위를 던짐 -> 숫자 지정(도/개/걸/윷/모/백도에 대응) -> 말 들어왔는지 여부 확인 ->
         # 백도 체크 -> 말 움직이기 -> 코너 여부 확인(지름길) -> 다시 던지기 여부 확인(윷/모)
 
     def startGame(self):
         self.endGameFlag = False
+        isDouble = False
 
-        while(self.endGameFlag == False):
+        while(self.endGameFlag == False):      
+
             if self.teamManager.isGameEnd() == False:
-                team = self.teamManager.getNextThrowingTeam()
-                self.throw(team)
+                team = self.teamManager.getNextThrowingTeam(isDouble)
+                isDouble = self.throw(team)
             else:
                 self.endGameFlag = True
                 team = self.teamManager.getWinTeam()
                 self.win(team)
                 self.clearGame()
-                
-    
-    def throw(self, team):
-        pass
 
+    #ThrowingEvent       
+    def throw(self, team):
+        # 던지는 UI 처리
+        # 말 선택 UI 처리
+        # delta, piece = UIManager.throw(team)
+        delta = random.randint(-1, 5)
+        piece = team.getPiece(0)
+
+        return self.move(piece, delta)
+
+
+    #PiecePositionChangedEvent
     def move(self, piece, delta):
 
         nextPosition = piece.currentPosition + delta
@@ -51,14 +64,14 @@ class Test:
 
             print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
             print("----------------------------------------------")
-            return True
+            return False
 
         if delta == -1:
             self.back(piece)
 
             print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
             print("----------------------------------------------")
-            return True
+            return False
 
         if self.checkEnd(piece, nextPosition) == False:
             self.movePiece(piece, nextPosition)
@@ -67,14 +80,14 @@ class Test:
             if delta == 4 or delta == 5:
                 print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
                 print("----------------------------------------------")
-                return False
+                return True
             else:
                 print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
                 print("----------------------------------------------")
-                return True
+                return False
         else:
             self.endPiece(piece)
-            return True
+            return False
 
     def back(self, piece):
         print("back called")
@@ -96,6 +109,7 @@ class Test:
         else:
             piece.currentPosition = piece.currentPosition - 1
 
+    #PieceGoalEvent
     def checkEnd(self, piece, nextPosition):
         if piece.movingMode == MOVING_MODE.DEFAULT:
             if nextPosition > 20:

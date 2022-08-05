@@ -12,10 +12,15 @@ class TeamManager:
         team_blue = Team('BLUE')
         self.teamList.append(team_red)
         self.teamList.append(team_blue)
-        
-    def getPieceFromTeam(self, team, index):
-        pass
-
 
     def getNextThrowingTeam():
+        pass
+
+    def getWinTeam():
+        pass
+
+    def removePiece():
+        pass
+
+    def isGameEnd():
         pass
