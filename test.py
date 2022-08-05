@@ -13,7 +13,7 @@ class Player:
 
 
 # 여러 개 말 있을 때 상황 구현 (업기, 말 선택해서 이동)
-# 턴 종료 시 상대팀으로 턴 넘기기 구현 + 팀 플레이어 마다 번갈아 가면서 던지는 것 구현
+# 턴 종료 시 상대팀으로 턴 넘기기 구현 + 팀 플레이어 마다 번갈아 가면서 던지는 것 구현 -> 완료
 # 플레이어 엔티티 자유롭게 움직일 수 있도록 구현(게임 플레이에는 영향 없게)
 
 class Test:
@@ -40,6 +40,13 @@ class Test:
                 self.win(team)
                 self.clearGame()
 
+    def win(self, team):
+        print("-----------------------------------")
+        print(team.teamName + "팀 승리")
+    
+    def clearGame(self):
+        self.teamManager.clear()
+
     #ThrowingEvent       
     def throw(self, team):
         # delta, piece = UIManager.throw(team)
@@ -56,7 +63,6 @@ class Test:
 
         if delta == 0:
             print("낙")
-
 
             print("after move pos : " + str(piece.currentPosition) + " mod : " + str(piece.movingMode))
             print("----------------------------------------------")
