@@ -1,5 +1,5 @@
 
-from piece import Piece
+
 
 
 class Team:
@@ -14,12 +14,12 @@ class Team:
 
         self.isFirstThrow = True
 
-    def getPiece(self, _index):
+    def getPieceFromIndex(self, _index):
         for piece in self.pieces:
             if int(piece.index) == int(_index):
                 return piece
 
-    def getPiece(self, _piece):
+    def matchPiece(self, _piece):
         for piece in self.pieces:
             if piece == _piece:
                 return piece

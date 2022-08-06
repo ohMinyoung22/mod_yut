@@ -69,7 +69,7 @@ class TeamManager:
         print("no piece removed")
 
     def registerPiece(self, piece):
-        team = self._getTeam(piece)
+        team = self.getTeam(piece)
         team.registerPieceFromStacked()
 
     def isGameEnd(self):
@@ -82,7 +82,7 @@ class TeamManager:
 
     def getTeam(self, piece):
         for team in self.teamList:
-            if team.getPiect(piece) != None:
+            if team.matchPiece(piece) != None:
                 return team
 
     def getCatchPieces(self, piece):
@@ -107,12 +107,13 @@ class TeamManager:
 
         pieceList = []
 
-        for team in self.teamList:
-            for piece in team.pieces:
-                if piece.movingMode == currentMode and piece.currentPosition == currentPosition:
-                    if team == pieceTeam:
-                        pieceList.append(piece)
+        for _piece in pieceTeam.pieces:
+            if _piece.movingMode == currentMode and _piece.currentPosition == currentPosition:
+                if (currentMode != MOVING_MODE.DEFAULT or currentPosition != 0) and _piece != piece:
+                    pieceList.append(_piece)
 
+        for p in pieceList:
+            print(p.__str__())
         return pieceList
 
 

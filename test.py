@@ -1,6 +1,4 @@
-import random
 
-from team import Team
 from teammanager import TeamManager
 
 from piece import MOVING_MODE
@@ -49,7 +47,7 @@ class Test:
 
         print("throw recieved piece : " + piece.__str__())
 
-        return self.move(team, piece, int(delta))
+        return self.move(piece, int(delta))
 
     def move(self, piece, delta):
 
@@ -75,11 +73,11 @@ class Test:
             print("----------------------------------------------")
 
             listStack = self.teamManager.getStackPieces(piece)
-            if listStack != None:
+            if len(listStack) > 0:
                 self.stack(listStack, piece)
 
             listCatch = self.teamManager.getCatchPieces(piece)
-            if listCatch != None:
+            if len(listCatch) > 0:
                 self.catch(listCatch)
 
                 if delta == 4 or delta == 5:
@@ -96,18 +94,34 @@ class Test:
             return False
 
     def stack(self, listStack, piece):
+
+        print(f" -- listStack -- {map(lambda e : e.__str__(), listStack)}")
+
+        print(f"before Stacked {self.teamManager.getTeam(piece)} : {self.teamManager.getTeam(piece).pieces.__str__()}")
         for _piece in listStack:
             piece.stackedList.append(_piece)
             self.teamManager.removePiece(_piece, True)
 
+        print("after Stacked" )
+        print(f"{self.teamManager.getTeam(piece)} : {self.teamManager.getTeam(piece).pieces.__str__()}")
+
     def deStack(self, piece):
-        self._pieceToStartPoint(piece)
+        print("-- deStacked --")
+
+        piece.stackedList = []
+
         self.teamManager.registerPiece(piece)
 
-    def catch(self, listCatch):
+        for _piece in self.teamManager.getTeam(piece).pieces:
+            self._pieceToStartPoint(_piece)
 
+        print("-- after deStacked --")
+        print(f"{self.teamManager.getTeam(piece)} : {self.teamManager.getTeam(piece).pieces.__str__()}")
+
+    def catch(self, listCatch):
+        print("catch called")
         for piece in listCatch:
-            if piece.stackedList != None:
+            if len(piece.stackedList) > 0:
                 self.deStack(piece)                
             else:
                 self._pieceToStartPoint(piece)
@@ -151,6 +165,7 @@ class Test:
     def movePiece(self, piece, nextPosition):
         print("move 적용 piece(전) : " + piece.__str__())
         piece.currentPosition = nextPosition
+        print("move 적용 piece(후) : " + piece.__str__())
 
         self.UIManager.movePiece(piece, nextPosition)
 

@@ -1,5 +1,4 @@
 from enum import Enum
-from team import Team
 
 class MOVING_MODE(Enum):
     DEFAULT = 1

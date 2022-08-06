@@ -11,11 +11,15 @@ class UIManager:
         thrower = team.getNextThrower()
         print("current thrower : " + thrower.playerID)
 
-        input("press any to throw")
-        delta = randint(-1, 5)
-        print(f"나온 숫자 {str(delta)}")
+        delta = int(input("숫자"))
+        print(delta)
+        print("----------------- 선택 가능 piece ----------------")
+        for p in team.pieces:
+            print(p.__str__())
+        print("--------------------------------")
         piece_num = input("press 0 ~ 1 to choose piece : ")
-        piece = team.getPiece(piece_num)
+        print(piece_num)
+        piece = team.getPieceFromIndex(int(piece_num))
 
         print(f"UIManager 고른 piece : {piece.__str__()}")
         return (delta, piece)
@@ -41,4 +45,7 @@ class UIManager:
             # piece currnetPos -> 6
             # 말 없애기
             pass
+    
+    def win(self, team):
+        print(f"{team.teamName} 승리")
 
