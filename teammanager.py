@@ -1,4 +1,4 @@
-from piece import Piece
+from piece import MOVING_MODE, Piece
 from player import Player
 from team import Team
 
@@ -61,12 +61,16 @@ class TeamManager:
     def getWinTeam(self):
         return self.winTeam
 
-    def removePiece(self, piece):
+    def removePiece(self, piece, isStacked=False):
         for team in self.teamList:
-            if team.removePiece(piece):
+            if team.removePiece(piece, isStacked):
                 return
         
         print("no piece removed")
+
+    def registerPiece(self, piece):
+        team = self._getTeam(piece)
+        team.registerPieceFromStacked()
 
     def isGameEnd(self):
         for team in self.teamList:
@@ -75,3 +79,40 @@ class TeamManager:
                 return True
 
         return False
+
+    def getTeam(self, piece):
+        for team in self.teamList:
+            if team.getPiect(piece) != None:
+                return team
+
+    def getCatchPieces(self, piece):
+        currentMode = piece.movingMode
+        currentPosition = piece.currentPosition
+        pieceTeam = self.getTeam(piece)
+
+        pieceList = []
+
+        for team in self.teamList:
+            for piece in team.pieces:
+                if piece.movingMode == currentMode and piece.currentPosition == currentPosition:
+                    if team != pieceTeam:
+                        pieceList.append(piece)
+
+        return pieceList
+
+    def getStackPieces(self, piece):
+        currentMode = piece.movingMode
+        currentPosition = piece.currentPosition
+        pieceTeam = self.getTeam(piece)
+
+        pieceList = []
+
+        for team in self.teamList:
+            for piece in team.pieces:
+                if piece.movingMode == currentMode and piece.currentPosition == currentPosition:
+                    if team == pieceTeam:
+                        pieceList.append(piece)
+
+        return pieceList
+
+

@@ -6,11 +6,9 @@ from teammanager import TeamManager
 from piece import MOVING_MODE
 from uimanager import UIManager
 
-# 여러 개 말 있을 때 상황 구현 (업기, 말 선택해서 이동)
-# 플레이어 구현
 # 플레이어 엔티티 자유롭게 움직일 수 있도록 구현(게임 플레이에는 영향 없게)
 
-# 플레이어 구현 -> 말 선택해서 이동 -> 업기 -> MOD로 옮기기
+# 업기 테스트
 class Test:
     def __init__(self):
         self.teamManager = TeamManager()
@@ -51,7 +49,7 @@ class Test:
 
         print("throw recieved piece : " + piece.__str__())
 
-        return self.move(piece, int(delta))
+        return self.move(team, piece, int(delta))
 
     def move(self, piece, delta):
 
@@ -60,8 +58,6 @@ class Test:
         if delta == 0:
             print("낙")
 
-            print("적용 후 " + piece.__str__())
-            print("----------------------------------------------")
             return False
 
         if delta == -1:
@@ -75,17 +71,50 @@ class Test:
             self.movePiece(piece, nextPosition)
             self.selectDirection(piece)
 
+            print("적용 후 " + piece.__str__())
+            print("----------------------------------------------")
+
+            listStack = self.teamManager.getStackPieces(piece)
+            if listStack != None:
+                self.stack(listStack, piece)
+
+            listCatch = self.teamManager.getCatchPieces(piece)
+            if listCatch != None:
+                self.catch(listCatch)
+
+                if delta == 4 or delta == 5:
+                    return False
+                else:
+                    return True        
+
             if delta == 4 or delta == 5:
-                print("적용 후 " + piece.__str__())
-                print("----------------------------------------------")
                 return True
             else:
-                print("적용 후 " + piece.__str__())
-                print("----------------------------------------------")
                 return False
         else:
             self.endPiece(piece)
             return False
+
+    def stack(self, listStack, piece):
+        for _piece in listStack:
+            piece.stackedList.append(_piece)
+            self.teamManager.removePiece(_piece, True)
+
+    def deStack(self, piece):
+        self._pieceToStartPoint(piece)
+        self.teamManager.registerPiece(piece)
+
+    def catch(self, listCatch):
+
+        for piece in listCatch:
+            if piece.stackedList != None:
+                self.deStack(piece)                
+            else:
+                self._pieceToStartPoint(piece)
+
+    def _pieceToStartPoint(self, piece):
+        piece.movingMode = MOVING_MODE.DEFAULT
+        self.movePiece(piece, 0)
 
     def back(self, piece):
         print("back called")

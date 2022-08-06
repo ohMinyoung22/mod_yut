@@ -12,6 +12,8 @@ class Piece:
         self.movingMode = MOVING_MODE.DEFAULT
         self.entity = entity
         self.index = index
+        self.stackedList = []
 
     def __str__(self):
-        return f"모드 : {self.movingMode} 위치 : {self.currentPosition} 인덱스 : {self.index}"
+        strd = self.stackedList if self.stackedList != None else "False"
+        return f"모드 : {self.movingMode} 위치 : {self.currentPosition} 인덱스 : {self.index} 스택 : {strd}"  
