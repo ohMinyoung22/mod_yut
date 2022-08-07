@@ -6,7 +6,7 @@ from uimanager import UIManager
 
 # 플레이어 엔티티 자유롭게 움직일 수 있도록 구현(게임 플레이에는 영향 없게)
 
-# 업기 테스트
+# 업을지 말지 결정
 class Test:
     def __init__(self):
         self.teamManager = TeamManager()
@@ -29,6 +29,7 @@ class Test:
             if self.teamManager.isGameEnd() == False:
                 team = self.teamManager.getNextThrowingTeam(isDouble)
                 isDouble = self.throw(team)
+                
             else:
                 self.endGameFlag = True
                 team = self.teamManager.getWinTeam()
@@ -63,6 +64,20 @@ class Test:
 
             print("적용 후 " + piece.__str__())
             print("----------------------------------------------")
+
+            listStack = self.teamManager.getStackPieces(piece)
+            if len(listStack) > 0:
+                self.stack(listStack, piece)
+
+            listCatch = self.teamManager.getCatchPieces(piece)
+            if len(listCatch) > 0:
+                self.catch(listCatch)
+
+                if delta == 4 or delta == 5:
+                    return False
+                else:
+                    return True 
+
             return False
 
         if self.checkEnd(piece, nextPosition) == False:
