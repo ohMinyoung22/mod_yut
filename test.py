@@ -179,10 +179,10 @@ class Test:
 
     def movePiece(self, piece, nextPosition):
         print("move 적용 piece(전) : " + piece.__str__())
+        self.UIManager.movePiece(piece, nextPosition)
         piece.currentPosition = nextPosition
         print("move 적용 piece(후) : " + piece.__str__())
 
-        self.UIManager.movePiece(piece, nextPosition)
 
     def selectDirection(self, piece):
         print("direction 적용 piece " + piece.__str__())
